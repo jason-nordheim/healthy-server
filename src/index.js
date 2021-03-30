@@ -44,18 +44,27 @@ app.post("/api/users", async (req, res) => {
 });
 
 app.get("/api/users", authenticateUser, (req, res) => {
-  console.log("headers", req.headers);
   models.user
     .findOne({ _id: req.headers.user_id })
     .then((user) => {
       const { first, last, email, day, month, year, height } = user;
-      res.json({ first, last, email, day, month, year, height }).send();
+      res.json({ first, last, email, day, month, year, height });
     })
     .catch((err) => {
       // todo: this should handled better,
       // error indicates no user found
       console.error(err);
+      res
+        .status(500)
+        .json(JSON.stringify({ error: err }))
+        .send();
     });
+});
+
+app.patch("/api/users", authenticateUser, async (req, res) => {
+  const user = await models.user.findOne({ _id: req.header.user_id });
+  console.log(user);
+  res.send(user);
 });
 
 app.post("/api/login", async (req, res) => {
