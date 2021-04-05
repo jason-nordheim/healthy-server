@@ -62,9 +62,21 @@ app.get("/api/users", authenticateUser, (req, res) => {
 });
 
 app.patch("/api/users", authenticateUser, async (req, res) => {
-  const user = await models.user.findOne({ _id: req.header.user_id });
-  console.log(user);
-  res.send(user);
+  const updatedUser = await models.user.updateOne(
+    { _id: req.headers.user_id },
+    { ...req.body }
+  );
+
+  // update failed
+  if (!updatedUser.ok) {
+    // todo: send error message
+    res.status(400).send();
+  }
+
+  // update did not fail
+  const user = await models.user.findOne({ _id: req.headers.user_id });
+  const { first, last, email, height, day, month, year } = user;
+  res.status(200).json({ first, last, email, height, day, month, year });
 });
 
 app.post("/api/login", async (req, res) => {
