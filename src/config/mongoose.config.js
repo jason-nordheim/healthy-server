@@ -23,10 +23,107 @@ const userSchema = new mongooseClient.Schema({
       return /^[^@]+@\w+(\.\w+)+\w$/.test(val);
     },
   },
+  uom: { type: String, required: true, default: "imperial" },
   password_digest: { type: String, required: true },
-  created_at: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 const userModel = mongooseClient.model("user", userSchema);
+
+const weightSchema = new mongooseClient.Schema({
+  userId: { type: mongoose.Types.ObjectId, required: true }, // used to associate records
+  kg: { type: Number, required: true }, // weight in kilograms
+  createdAt: { type: Date, default: Date.now }, // timestamp
+});
+const weightModel = mongooseClient.model("weight", weightSchema);
+
+const activitySchema = new mongooseClient.Schema({
+  name: { type: String, required: true }, // verbose name of activity
+  // geo location
+  location: {
+    name: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    latitude: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    longitude: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    // calories burned
+    calories: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    // distance in kilometers
+    distance: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    elevation: {
+      start: {
+        type: Number,
+        required: false,
+        default: null,
+      },
+      end: {
+        type: Number,
+        required: false,
+        default: null,
+      },
+    },
+    // user-defined category for activity
+    category: {
+      type: String,
+      required: true,
+      default: null,
+    },
+    // when the activity is started
+    startedAt: {
+      type: Date,
+      required: false,
+      default: null,
+    },
+    // when the activity is completed
+    completedAt: {
+      type: Date,
+      required: false,
+      default: null,
+    },
+    // sub document containing heart rate information
+    heartRate: {
+      average: {
+        type: Number,
+        required: false,
+        default: null,
+      },
+      maximum: {
+        type: Number,
+        required: false,
+        default: null,
+      },
+      minimum: {
+        type: Number,
+        required: false,
+        default: null,
+      },
+    },
+    notes: {
+      type: String,
+      required: false,
+      default: "",
+    },
+  },
+  createdAt: { type: Date, default: Date.now }, // timestamp
+});
+const activityModel = mongooseClient.model("activity", activitySchema);
 
 mongooseClient.connect(mongo_url, connectOptions);
 
@@ -39,6 +136,8 @@ connection.once("open", function () {
 module.exports = {
   models: {
     user: userModel,
+    weight: weightModel,
+    activity: activityModel,
   },
   connection,
 };
