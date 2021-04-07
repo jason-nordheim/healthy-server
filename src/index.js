@@ -43,7 +43,11 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
+/**
+ * Get user profile
+ */
 app.get("/api/users", authenticateUser, (req, res) => {
+  // user_id added as part of authenticateUser middleware
   models.user
     .findOne({ _id: req.headers.user_id })
     .then((user) => {
@@ -61,7 +65,11 @@ app.get("/api/users", authenticateUser, (req, res) => {
     });
 });
 
+/**
+ * Update a single user
+ */
 app.patch("/api/users", authenticateUser, async (req, res) => {
+  // user_id added as part of authenticateUser middleware
   const updatedUser = await models.user.updateOne(
     { _id: req.headers.user_id },
     { ...req.body }
@@ -79,25 +87,33 @@ app.patch("/api/users", authenticateUser, async (req, res) => {
   res.status(200).json({ first, last, email, height, day, month, year });
 });
 
+/**
+ * Login Route Handler
+ * - creates a token that expires in 24 hours
+ */
 app.post("/api/login", async (req, res) => {
   try {
     const params = {
       email: req.body.user.email,
       password: req.body.user.password,
     };
+    // find related user
     const user = await models.user.findOne({
       email: params.email,
     });
-    //console.debug("user", user);
+    // validate provided credentials
     const validPassword = await bcrypt.compare(
       params.password,
       user.password_digest
     );
     if (validPassword) {
+      // sign token
       const token = await jwt.sign({ id: user.id }, jwt_key, jwt_opt);
+      // send token as json
       await res.status(200).json({ token }).send();
     } else await res.status(401).send();
   } catch (error) {
+    // something went wrong
     await res.status(400).json({ error: error.message }).send();
   }
 });
