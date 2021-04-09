@@ -118,6 +118,57 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.get("/api/weights", authenticateUser, async (req, res) => {
+  try {
+    const userWeights = await models.weight.find({
+      userId: req.headers.user_id,
+    });
+    await res.status(200).json(userWeights);
+  } catch (error) {
+    return await res.status(500).json({ error });
+  }
+});
+
+app.post("/api/weights", authenticateUser, async (req, res) => {
+  try {
+    const { kg, source } = req.body;
+    if (kg && req.headers.user_id) {
+      const newWeight = await models.weight({
+        kg,
+        source,
+        userId: req.headers.user_id,
+      });
+      const savedWeight = await newWeight.save();
+      // console.log(savedWeight);
+      await res.status(201).json(savedWeight);
+    } else {
+      // console.log({ body: req.body, userId: req.headers.user_id });
+      return await res
+        .status(400)
+        .json({ error: "Missing required parameters" });
+    }
+  } catch (error) {
+    return await res.status(500).json({ error });
+  }
+});
+
+app.delete("/api/weights", authenticateUser, async (req, res) => {
+  try {
+    // make sure we have a weight id record to delete
+    if (!req.body._id) {
+      return res.status(400).json({ error: "Missing parameter: `_id`" });
+    }
+
+    const userId = req.headers.user_id;
+    const weightId = req.body._id;
+
+    await models.weight.deleteOne({ _id: weightId, userId });
+    return await res.status(200).send();
+  } catch (error) {
+    return await res.status(500).json({ error });
+  }
+});
+
 app.listen(port, () =>
   console.log(`Server listening on http://localhost:${port}`)
 );
