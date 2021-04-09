@@ -32,6 +32,7 @@ const userModel = mongooseClient.model("user", userSchema);
 const weightSchema = new mongooseClient.Schema({
   userId: { type: mongoose.Types.ObjectId, required: true }, // used to associate records
   kg: { type: Number, required: true }, // weight in kilograms
+  source: { type: String, required: false, default: undefined },
   createdAt: { type: Date, default: Date.now }, // timestamp
 });
 const weightModel = mongooseClient.model("weight", weightSchema);
@@ -45,12 +46,34 @@ const activitySchema = new mongooseClient.Schema({
       required: false,
       default: null,
     },
+    // e.g. "Running", "Walking",
+    type: {
+      type: String,
+      required: true,
+      default: null,
+    },
+    // e.g. "Outdoors", "Treadmill", "Trail", "Open water"
+    variation: {
+      type: String,
+      required: false,
+      default: null,
+    },
     latitude: {
       type: Number,
       required: false,
       default: null,
     },
     longitude: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    repetitions: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+    sets: {
       type: Number,
       required: false,
       default: null,
@@ -120,6 +143,11 @@ const activitySchema = new mongooseClient.Schema({
       required: false,
       default: "",
     },
+  },
+  public: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   createdAt: { type: Date, default: Date.now }, // timestamp
 });
