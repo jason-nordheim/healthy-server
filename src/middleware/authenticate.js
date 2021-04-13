@@ -3,10 +3,12 @@ const { jwt_opt, jwt_key } = require("../config/app.config");
 const isAfter = require("date-fns/isAfter");
 
 const authenticateUser = (req, res, next) => {
+  //console.log({ headers: req.header });
   if (!req.headers.authorization) {
     return res.status(400).send();
   }
   const token = req.headers.authorization.split(" ")[1];
+  //console.log("token", { token });
   try {
     const decoded_token = jwt.verify(token, jwt_key, jwt_opt);
     const token_expires = new Date(decoded_token.exp * 1000);
