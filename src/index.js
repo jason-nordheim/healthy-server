@@ -8,6 +8,7 @@ const cors = require("cors");
 const { port, jwt_key, salt_rounds, jwt_opt } = require("./config/app.config");
 const { models } = require("./config/mongoose.config");
 const { authenticateUser } = require("./middleware/authenticate");
+const { searchFoods, getFood } = require("./util/foodApi");
 
 const app = express();
 
@@ -167,6 +168,33 @@ app.delete("/api/weights", authenticateUser, async (req, res) => {
   } catch (error) {
     return await res.status(500).json({ error });
   }
+});
+
+app.get("/api/foods/search", async (req, res) => {
+  const { query, start, count, spell } = req.query;
+  console.log({ query, start, count, spell });
+  try {
+    const results = await searchFoods(query, start, count, spell);
+    return await res.status(200).json(results.data);
+  } catch (error) {
+    console.error({ error });
+    return await res.status(500).json({ error });
+  }
+});
+
+app.get("/api/foods/search/:id", async (req, res) => {
+  try {
+    const results = await getFood(req.params.id);
+    res.status(200).json(results.data);
+  } catch (error) {
+    console.error({ error });
+    return await res.status(500).json({ error });
+  }
+});
+
+app.get("/api/nutrients/search/:id", async (req, res) => {
+  try {
+  } catch (error) {}
 });
 
 app.listen(port, () =>
