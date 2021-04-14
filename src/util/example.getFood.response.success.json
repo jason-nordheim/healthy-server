@@ -1,0 +1,34 @@
+{
+  "id": "urn:uuid:2bf7a26c-4a9b-492e-8583-e4100a541034",
+  "description": "pizza, cheese, cooked, from frozen, 15.1 oz",
+  "quantity": 1,
+  "unit": "urn:uuid:3340624b-f24d-4997-9ca6-11221b22008e",
+  "category": "Frozen Entrees",
+  "product": "USDA",
+  "supplier": "USDA SR-28",
+  "nutrient_data": [
+    {
+      "nutrient": "urn:uuid:a4d01e46-5df2-4cb3-ad2c-6b438e79e5b9",
+      "value": 404.68
+    }
+  ],
+  "characteristics": ["Vegetarian/Lactovo"],
+  "groups": [
+    "Dishes & Prepared Foods",
+    "Italian",
+    "Dairy Products & Subs",
+    "Frozen Foods",
+    "Ethnic Foods"
+  ],
+  "units": [
+    "urn:uuid:9eda6d41-4fbb-4a97-b046-46aee8a086de",
+    "urn:uuid:e1d79375-15db-4ed7-8ead-f64dc2319091",
+    "urn:uuid:e0ad190a-d48b-443e-b637-e1cf05db2cdb",
+    "urn:uuid:3e8384f0-ea47-4fde-b7e1-a12747b28a30",
+    "urn:uuid:d3be684c-ebfa-4861-924f-8840600d1e84",
+    "urn:uuid:198149f8-4499-487b-9761-2028cdae404f",
+    "urn:uuid:0e5f4dd2-3353-477f-9773-0ed116c93e2e",
+    "urn:uuid:3340624b-f24d-4997-9ca6-11221b22008e"
+  ],
+  "discontinued": false
+}

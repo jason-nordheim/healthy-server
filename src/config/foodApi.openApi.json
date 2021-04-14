@@ -1,0 +1,283 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Nutrition API",
+    "description": "",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://nutrition-api.esha.com"
+    },
+    {
+      "url": "https://nutrition-api.esha.com"
+    }
+  ],
+  "paths": {
+    "/foods": {
+      "get": {
+        "summary": "Food Search",
+        "operationId": "food-search",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "A food query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "The (0-based) index of the first result to return.",
+            "schema": {
+              "enum": [0],
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "The maximum number of results to return.",
+            "schema": {
+              "enum": [25],
+              "type": "integer",
+              "default": 25
+            }
+          },
+          {
+            "name": "spell",
+            "in": "query",
+            "description": "If true or unspecified and no results are found for the specified query, apply spelling correction and re-query.",
+            "schema": {
+              "enum": [true],
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "string",
+              "default": "application/json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    },
+    "/units": {
+      "get": {
+        "summary": "Units",
+        "description": "Returns a JSON document containing all known units.",
+        "operationId": "units",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "String",
+              "default": "application/json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    },
+    "/nutrients": {
+      "get": {
+        "summary": "Nutrients",
+        "description": "Returns a JSON document containing all known nutrients.",
+        "operationId": "nutrients",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "string",
+              "default": "application/json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    },
+    "/analysis": {
+      "post": {
+        "summary": "Analysis",
+        "description": "Accepts a JSON document containing the foods to be analyzed and returns a JSON document containing the results.\n",
+        "operationId": "analysis",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "enum": ["application/vnd.com.esha.data.Foods+json"],
+              "type": "string",
+              "default": "application/vnd.com.esha.data.Foods+json"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "string",
+              "default": "application/json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    },
+    "/food/{uri}": {
+      "get": {
+        "summary": "Food",
+        "description": "Returns a JSON representation of the specified food.",
+        "operationId": "food",
+        "parameters": [
+          {
+            "name": "uri",
+            "in": "path",
+            "description": "The food URI",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "string",
+              "default": "application/json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    },
+    "/recommendations": {
+      "post": {
+        "summary": "Recommendations",
+        "description": "Accepts a JSON document containing the personal profile and nutrient standard system for which to generate recommendations, then returns a JSON document containing the results.",
+        "operationId": "recommendations",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "string",
+              "default": "application/json"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "enum": ["application/vnd.com.esha.data.PersonalProfile+json"],
+              "type": "string",
+              "default": "application/vnd.com.esha.data.PersonalProfile+json"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON document containing the personal profile and nutrient standard system for which to generate recommendations",
+          "content": {
+            "application/json": {
+              "example": {
+                "system": "DGA",
+                "sex": "Female",
+                "ageInYears": 20,
+                "heightInInches": 64,
+                "weightInPounds": 120,
+                "physicalActivityLevelCategory": "LowActive",
+                "pregnancyDurationInWeeks": "",
+                "lactationDurationInMonths": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Service",
+        "description": "Retrieves a JSON document describing the deployed version of the Nutrition API",
+        "operationId": "service",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "enum": ["application/json"],
+              "type": "string",
+              "default": "application/json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": null
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "type": "apiKey",
+        "name": "Ocp-Apim-Subscription-Key",
+        "in": "header"
+      },
+      "apiKeyQuery": {
+        "type": "apiKey",
+        "name": "apikey",
+        "in": "query"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": []
+    },
+    {
+      "apiKeyQuery": []
+    }
+  ]
+}
