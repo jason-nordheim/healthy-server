@@ -170,6 +170,9 @@ app.delete("/api/weights", authenticateUser, async (req, res) => {
   }
 });
 
+/**
+ * Endpoint for searching foods
+ */
 app.get("/api/foods/search", async (req, res) => {
   try {
     const result = await searchFoods(req.query.query);
@@ -180,19 +183,8 @@ app.get("/api/foods/search", async (req, res) => {
   }
 });
 
-app.get("/api/foods/search/:id", async (req, res) => {
-  try {
-    const results = await getFood(req.params.id);
-    res.status(200).json(results.data);
-  } catch (error) {
-    console.error({ error });
-    return await res.status(500).json({ error });
-  }
-});
-
-app.get("/api/nutrients/search/:id", async (req, res) => {
-  try {
-  } catch (error) {}
+app.post("/api/food", authenticateUser, async (req, res) => {
+  const userId = req.headers.user_id;
 });
 
 app.listen(port, () =>
