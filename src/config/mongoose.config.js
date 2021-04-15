@@ -159,7 +159,7 @@ const foodSchema = new mongooseClient.Schema({
   label: { type: String, required: true }, // name of food (edaman)
   category: { type: String, required: false }, // category of food (edaman)
   categoryLabel: { type: String, required: false, default: "food" },
-  image: { type: String, required: false, default: null },
+  image: { type: String, required: false, default: null }, // url to image of food
   // defined as an object... each key code represents the
   // a defined nutrient (documentation: https://developer.edamam.com/food-database-api-docs)
   nutrients: {
