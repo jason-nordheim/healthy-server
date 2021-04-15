@@ -183,7 +183,18 @@ app.get("/api/foods/search", async (req, res) => {
   }
 });
 
-app.post("/api/food", authenticateUser, async (req, res) => {
+app.get("/api/foods", authenticateUser, async (req, res) => {
+  try {
+    const foods = await models.food.find({
+      userId: req.headers.user_id,
+    });
+    res.status(200).json({ foods });
+  } catch (error) {
+    return await res.status(500).json({ error });
+  }
+});
+
+app.post("/api/foods", authenticateUser, async (req, res) => {
   try {
     const userId = req.headers.user_id;
     const food = req.body.food;
@@ -191,14 +202,11 @@ app.post("/api/food", authenticateUser, async (req, res) => {
       ...food,
       userId,
     });
-    res.status(201).json({ ...newFood });
-    //const savedFood = await newFood.save();
-    // return await res
-    //   .status(201)
-    //   .json({
-    //     food: savedFood,
-    //     message: `Successfully saved ${savedFood.label} for userId: ${userId}`,
-    //   });
+    const savedFood = await newFood.save();
+    return await res.status(201).json({
+      food: savedFood,
+      message: `Successfully saved ${savedFood.label} for userId: ${userId}`,
+    });
   } catch (error) {
     return await res.status(500).json({ error });
   }
