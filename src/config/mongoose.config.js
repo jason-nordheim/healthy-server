@@ -153,6 +153,49 @@ const activitySchema = new mongooseClient.Schema({
 });
 const activityModel = mongooseClient.model("activity", activitySchema);
 
+const foodSchema = new mongooseClient.Schema({
+  userId: { type: mongoose.Types.ObjectId, required: true }, // used to associate records
+  foodId: { type: String, required: true }, // used to associate back with edaman api
+  label: { type: String, required: true }, // name of food (edaman)
+  category: { type: String, required: false }, // category of food (edaman)
+  categoryLabel: { type: String, required: false, default: "food" },
+  image: { type: String, required: false, default: null },
+  // defined as an object... each key code represents the
+  // a defined nutrient (documentation: https://developer.edamam.com/food-database-api-docs)
+  nutrients: {
+    CA: { type: Number, default: null, required: false },
+    CHOCDF: { type: Number, default: null, required: false },
+    CHOLE: { type: Number, default: null, required: false },
+    FAMS: { type: Number, default: null, required: false },
+    FAPU: { type: Number, default: null, required: false },
+    FASAT: { type: Number, default: null, required: false },
+    FAT: { type: Number, default: null, required: false },
+    FATRN: { type: Number, default: null, required: false },
+    FE: { type: Number, default: null, required: false },
+    FIBTG: { type: Number, default: null, required: false },
+    FOLDFE: { type: Number, default: null, required: false },
+    K: { type: Number, default: null, required: false },
+    MG: { type: Number, default: null, required: false },
+    NA: { type: Number, default: null, required: false },
+    ENERC_KCAL: { type: Number, default: null, required: false },
+    NIA: { type: Number, default: null, required: false },
+    P: { type: Number, default: null, required: false },
+    PROCNT: { type: Number, default: null, required: false },
+    RIBF: { type: Number, default: null, required: false },
+    SUGAR: { type: Number, default: null, required: false },
+    THIA: { type: Number, default: null, required: false },
+    TOCPHA: { type: Number, default: null, required: false },
+    VITA_RAE: { type: Number, default: null, required: false },
+    VITB12: { type: Number, default: null, required: false },
+    VITB6A: { type: Number, default: null, required: false },
+    VITC: { type: Number, default: null, required: false },
+    VITD: { type: Number, default: null, required: false },
+    VITK1: { type: Number, default: null, required: false },
+  },
+  createdAt: { type: Date, default: Date.now },
+});
+const foodModel = mongooseClient.model("food", foodSchema);
+
 mongooseClient.connect(mongo_url, connectOptions);
 
 const connection = mongooseClient.connection;
@@ -166,6 +209,7 @@ module.exports = {
     user: userModel,
     weight: weightModel,
     activity: activityModel,
+    food: foodModel,
   },
   connection,
 };
